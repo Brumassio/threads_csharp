@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 class Program
 {
-  public Object locker = new Object();
+  //public Object locker = new Object();
 
     public static int[,] atribui(int[,] array)// é 
     {
@@ -80,21 +80,10 @@ class Program
         return vet;
     }
 
-
-
-    // public static void Threadson() {
-    //     for (int i = 0; i < 10; i++) {
-    //         Console.WriteLine("ThreadProc: {0}", i);
-    //         // Yield the rest of the time slice.
-    //         Thread.Sleep(0);
-    //     }
-    // }
-    
-
      static void Main()
     {
-        Console.WriteLine("Hello, World");
-        //int num = rand.Next(1000)
+
+
         int[,] array10 = new int[10,10];
         int[,] array100 = new int[100,100];
         int[,] array1000 = new int[1000,1000];
@@ -111,33 +100,110 @@ class Program
         atribui(array10_2);
         atribui(array100_2);
         atribui(array1000_2);
-        Program pro = new Program();
+        Object locker = new Object();
 
         Thread[] threads = new Thread[4];
-        Conta con10 = new Conta(array100,array100_2);
+        Conta con = new Conta(array100,array100_2);
         
-        try
+        int op =1;
+        while(op!=0)
         {
-            lock (pro.locker)
-           { 
-                for (int i = 0; i < threads.GetLength(0); i++)
-                {
-                    Thread thread = new Thread(con10.soma);
-                    thread.Name = "Thread" + i;
-                    threads[i] = thread;
-                
-                    foreach (var item in threads)
+            Console.WriteLine("\n\nEscolha uma das opções a seguir:\n");
+            Console.WriteLine("1--Soma");
+            Console.WriteLine("2--Subtração"); 
+            Console.WriteLine("3--Multiplicação");
+            Console.WriteLine("0--Sair");
+            int.TryParse(Console.ReadLine(),out op);
+            switch (op)
+            {   
+                case 0:
+                    break;
+                case 1:
+                    System.Console.WriteLine("Soma:");
+                    try
                     {
-                        item.Start();
-                    }      
-                }
+                        lock (locker)
+                        { 
+                            for (int i = 0; i < threads.GetLength(0); i++)
+                            {
+                                Thread thread = new Thread(con.soma);
+                                thread.Name = "Thread" + i;
+                                threads[i] = thread;
+                            
+                                foreach (var item in threads)
+                                {
+                                    item.Start();
+                                    item.Join();
+                                }      
+                            }
+                        }                    
+                    }
+                    catch (System.NullReferenceException e)
+                    {
+                        System.Console.WriteLine(e.Message);
+                        throw;
+                    }
+                    break;
+
+                case 2:
+                    System.Console.WriteLine("Subtração:");                 
+                    try
+                    {
+                        lock (locker)
+                        { 
+                            for (int i = 0; i < threads.GetLength(0); i++)
+                            {
+                                Thread thread = new Thread(con.subtracao);
+                                thread.Name = "Thread" + i;
+                                threads[i] = thread;
+                            
+                                foreach (var item in threads)
+                                {
+                                    item.Start();
+                                    item.Join();
+                                }      
+                            }
+                        }                    
+                    }
+                    catch (System.NullReferenceException e)
+                    {
+                        System.Console.WriteLine(e.Message);
+                        throw;
+                    }
+                    break;
+
+                case 3:
+                    System.Console.WriteLine("Multiplicação");
+                    try
+                    {
+                        lock (locker)
+                        { 
+                            for (int i = 0; i < threads.GetLength(0); i++)
+                            {
+                                Thread thread = new Thread(con.multiplicacao);
+                                thread.Name = "Thread" + i;
+                                threads[i] = thread;
+                            
+                                foreach (var item in threads)
+                                {
+                                    item.Start();
+                                    item.Join();
+                                }      
+                            }
+                        }                    
+                    }
+                    catch (System.NullReferenceException e)
+                    {
+                        System.Console.WriteLine(e.Message);
+                        throw;
+                    }
+                    break;
+                
+                default:
+                    System.Console.WriteLine("\nDigite uma opção válida !");
+                    break;
             }
-        }
-        catch (NullReferenceException e)
-        {
-            if (e.Source != null)
-                Console.WriteLine("IOException source: {0}", e.Source);
-            throw;
+            
         }
             
     }
