@@ -28,59 +28,8 @@ class Program
             Console.WriteLine(i);
         }
     }
-
-
-    // Vo pro trampo flw
-    public static int[,]? multiplica(int[,] array1, int[,] array2){
-        int l1 = array1.GetLength(0);
-        int c1 = array1.GetLength(1);
-        int l2 = array2.GetLength(0);
-        int c2 = array2.GetLength(1);
-
-        if(c1 != l2){
-            Console.WriteLine("Não pode ser multiplicada");
-            return null;
-        }
-
-        int res = 0;
-        int[,] matriz = new int[l1,c2];
-
-        for(int i = 0;i< l1;i++){
-            for (int j = 0; j < c2; j++){
-                res = 0;
-                for(int m =0;m<c1; m++)
-                {
-                    res += array1[i,m] * array2[m, j];
-                }
-                matriz[i,j] = res;
-            }
-        }
-        return matriz;
-    }
     
-    public static int[,] subtracao(int[,]array1, int [,]array2,int tam){
-        int [,]vet = new int [tam,tam];
-        for(int i = 0;i< tam;i++){
-            for (int j = 0; j < tam; j++){
-                System.Console.WriteLine($"Subtração os valores {array1[i,j]} e {array2[i,j]} tem como resultado: {array1[i,j]+array2[i,j]}");
-                vet[i,j] = array1[i,j]-array2[i,j];
-            }
-        }
-        return vet;
-    }
-
-    public static int[,] soma(int [,]array1, int [,]array2,int tam){
-        int [,]vet = new int[tam,tam];
-                for (int i = 0; i < tam; i++){
-                for (int j = 0; j < tam; j++){
-                    System.Console.WriteLine($"Somando os valores {array1[i,j]} e {array2[i,j]} tem como resultado: {array1[i,j]+array2[i,j]}");
-                    vet[i,j] = array1[i,j]+array2[i,j];
-            }
-        }
-        return vet;
-    }
-
-     static void Main()
+    static void Main()
     {
 
 
@@ -102,107 +51,159 @@ class Program
         atribui(array1000_2);
         Object locker = new Object();
 
-        Thread[] threads = new Thread[4];
-        Conta con = new Conta(array100,array100_2);
-        
+        Thread[] threads = new Thread[2];
+        Thread mainThread = Thread.CurrentThread;
+        mainThread.Name = "mainThread";
+        // para testar as outras matrizes
+        Conta con = new Conta(array1000,array1000_2);
         int op =1;
+        int op2 = 2;
         while(op!=0)
-        {
+        {   
             Console.WriteLine("\n\nEscolha uma das opções a seguir:\n");
-            Console.WriteLine("1--Soma");
-            Console.WriteLine("2--Subtração"); 
-            Console.WriteLine("3--Multiplicação");
-            Console.WriteLine("0--Sair");
-            int.TryParse(Console.ReadLine(),out op);
-            switch (op)
-            {   
+            Console.WriteLine("1--Sequencial");
+            Console.WriteLine("2--Multithread (duas threads)");
+            int.TryParse(Console.ReadLine(),out op); 
+            switch(op){
                 case 0:
-                    break;
+                System.Console.WriteLine("Volte sempre !");
+                break;
                 case 1:
-                    System.Console.WriteLine("Soma:");
-                    try
-                    {
-                        lock (locker)
-                        { 
-                            for (int i = 0; i < threads.GetLength(0); i++)
-                            {
-                                Thread thread = new Thread(con.soma);
-                                thread.Name = "Thread" + i;
-                                threads[i] = thread;
-                            
-                                foreach (var item in threads)
-                                {
-                                    item.Start();
-                                    item.Join();
-                                }      
-                            }
-                        }                    
-                    }
-                    catch (System.NullReferenceException e)
-                    {
-                        System.Console.WriteLine(e.Message);
-                        throw;
-                    }
+                Console.WriteLine("\n\nEscolha uma das opções a seguir (Multithread):\n");
+                Console.WriteLine("1--Soma");
+                Console.WriteLine("2--Subtração"); 
+                Console.WriteLine("3--Multiplicação");
+                Console.WriteLine("0--Sair");
+                int.TryParse(Console.ReadLine(),out op2); 
+                switch(op2){
+                    case 1:
+                    DateTime beginsom = DateTime.Now;
+                    con.somaSeq();
+                    DateTime endsom = DateTime.Now;
+                    System.Console.WriteLine(endsom.Subtract(beginsom));
                     break;
+                    case 2:
+                    DateTime beginsub = DateTime.Now;
+                    con.subtracaoSeq();
+                    DateTime endsub = DateTime.Now;
+                    System.Console.WriteLine(endsub.Subtract(beginsub));
+                    break;
+                    case 3:
+                    DateTime beginmul = DateTime.Now;
+                    con.multiplicaSeq();
+                    DateTime endmul = DateTime.Now;
+                    System.Console.WriteLine(endmul.Subtract(beginmul));
+                    break;
+                    default:
+                    System.Console.WriteLine("Opção errada !");
+                    break;
+                }               
 
+                break;
                 case 2:
-                    System.Console.WriteLine("Subtração:");                 
-                    try
-                    {
-                        lock (locker)
-                        { 
-                            for (int i = 0; i < threads.GetLength(0); i++)
-                            {
-                                Thread thread = new Thread(con.subtracao);
-                                thread.Name = "Thread" + i;
-                                threads[i] = thread;
-                            
-                                foreach (var item in threads)
-                                {
-                                    item.Start();
-                                    item.Join();
-                                }      
-                            }
-                        }                    
-                    }
-                    catch (System.NullReferenceException e)
-                    {
-                        System.Console.WriteLine(e.Message);
-                        throw;
-                    }
-                    break;
+                Console.WriteLine("\n\nEscolha uma das opções a seguir (Multithread):\n");
+                Console.WriteLine("1--Soma");
+                Console.WriteLine("2--Subtração"); 
+                Console.WriteLine("3--Multiplicação");
+                Console.WriteLine("0--Sair");
+                int.TryParse(Console.ReadLine(),out op2);
+                switch (op2)
+                {   
+                    case 0:
+                        break;
+                    case 1:
+                        //guardando o tempo para calcular o tempo de execução
+                        DateTime begin = DateTime.Now;
+                        System.Console.WriteLine("Soma:");
 
-                case 3:
-                    System.Console.WriteLine("Multiplicação");
-                    try
-                    {
-                        lock (locker)
-                        { 
-                            for (int i = 0; i < threads.GetLength(0); i++)
-                            {
-                                Thread thread = new Thread(con.multiplicacao);
-                                thread.Name = "Thread" + i;
-                                threads[i] = thread;
-                            
-                                foreach (var item in threads)
-                                {
-                                    item.Start();
-                                    item.Join();
-                                }      
-                            }
-                        }                    
-                    }
-                    catch (System.NullReferenceException e)
-                    {
-                        System.Console.WriteLine(e.Message);
-                        throw;
-                    }
-                    break;
-                
+                        //guardando a primeira thread
+                        Thread thread = new Thread(con.soma1);
+                        thread.Name = "Thread" + 0;
+                        threads[0] = thread;
+                        //guardando a segunda thread
+                        Thread thread2 = new Thread(con.soma2);
+                        thread.Name = "Thread" + 1;
+                        threads[1] = thread2;  
+
+                        foreach (var item in threads)
+                        {
+                            //inicializando as threads guardadas anteriormente
+                            item.Start();
+                        }      
+                        // pode variar o tempo de sleep para todas as operações (pode ser por causa do break do switch)-> matriz[10][10]: 1 ,
+                        // matriz[100][100]:2400, matriz[1000][1000]: um valor maior  
+                        Thread.Sleep(10000);
+                        DateTime end = DateTime.Now;
+                        //printando o tempo de execução
+                        System.Console.WriteLine($"Tempo de execução: {end.Subtract(begin)} ");  
+                        break;
+
+                    case 2:
+                        //guardando o tempo para calcular o tempo de execução
+                        DateTime beginSub = DateTime.Now;
+                        System.Console.WriteLine("Subtracao:");
+
+                        //guardando a primeira thread
+                        Thread threadSub = new Thread(con.subtracao1);
+                        threadSub.Name = "Thread" + 0;
+                        threads[0] = threadSub;
+                        //guardando a segunda thread
+                        Thread thread2Sub = new Thread(con.subtracao2);
+                        threadSub.Name = "Thread" + 1;
+                        threads[1] = thread2Sub;  
+
+                        foreach (var item in threads)
+                        {
+                            //inicializando as threads guardadas anteriormente
+                            item.Start();
+                        }      
+                        // pode variar o tempo de sleep para todas as operações (pode ser por causa do break do switch)-> matriz[10][10]: 1 ,
+                        // matriz[100][100]:3000, matriz[1000][1000]: um valor maior  
+                        Thread.Sleep(10000);
+                        DateTime endSub = DateTime.Now;
+                        //printando o tempo de execução
+                        System.Console.WriteLine($"Tempo de execução: {endSub.Subtract(beginSub)} ");                  
+                        break;
+
+                    case 3:
+                        //guardando o tempo para calcular o tempo de execução
+                        DateTime beginMul = DateTime.Now;
+                        System.Console.WriteLine("Multiplicação:");
+
+                        //guardando a primeira thread
+                        Thread threadMul = new Thread(con.multiplicacao1);
+                        threadMul.Name = "Thread" + 0;
+                        threads[0] = threadMul;
+                        //guardando a segunda thread
+                        Thread thread2Mul = new Thread(con.multiplicacao2);
+                        threadMul.Name = "Thread" + 1;
+                        threads[1] = thread2Mul;  
+
+                        foreach (var item in threads)
+                        {
+                            //inicializando as threads guardadas anteriormente
+                            item.Start();
+                        }      
+                        // pode variar o tempo de sleep para todas as operações (pode ser por causa do break do switch)-> matriz[10][10]: 1 ,
+                        // matriz[100][100]:3000, matriz[1000][1000]: um valor maior ai !  
+                        Thread.Sleep(10000);
+                        DateTime endMul = DateTime.Now;
+                        //printando o tempo de execução
+                        System.Console.WriteLine($"Tempo de execução: {endMul.Subtract(beginMul)} "); 
+                        break;
+                    
+                    default:
+                        System.Console.WriteLine("\nDigite uma opção válida ! :D");
+                        break;
+                }
+                break;
+
                 default:
-                    System.Console.WriteLine("\nDigite uma opção válida !");
-                    break;
+                System.Console.WriteLine("\nDigite uma opção valida !");
+                break;
             }
+
+
             
         }
             
