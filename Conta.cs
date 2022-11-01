@@ -29,7 +29,7 @@ namespace Arq2_Thread
                     {
                         res += this.array1[i,m] * this.array2[m, j];
                     }
-                    System.Console.WriteLine($"Multiplicação resulta em : {res}");
+                    // System.Console.WriteLine($"Multiplicação resulta em : {res}");
                     matriz[i,j] = res;
                 }
             }
@@ -90,11 +90,8 @@ namespace Arq2_Thread
             for (int i=0;i<this.array1.GetLength(0)/2;i++) {
                 for (int j=0;j<this.array2.GetLength(1);j++) {
                     matriz[i,j] = this.array1[i,j] + this.array2[i,j];
-                    // System.Console.WriteLine($"Resultado da soma da pos [{i}][{j}]: {this.array1[i,j]+this.array2[i,j]}");
                 }
             }
-            //Thread.CurrentThread.Join();           
-
         }
         
         //Função Subtração para execução utilizando Threads.
@@ -103,10 +100,8 @@ namespace Arq2_Thread
             for (int i=0;i<this.array1.GetLength(0);i++) {
                 for (int j=0;j<this.array2.GetLength(1);j++) {
                     matriz[i,j] = this.array1[i,j] - this.array1[i,j];
-                    // System.Console.WriteLine($"Resultado da subtração da pos [{i}][{j}]: {this.array1[i,j]-this.array2[i,j]}");
                 }
             }
-            Thread.CurrentThread.Join();
         }
 
         //Função Multiplicação para execução utilizando Threads.
@@ -129,28 +124,22 @@ namespace Arq2_Thread
                     matriz[i,j] = res;
                 }
             }
-            Thread.CurrentThread.Join();         
 
         }
 
         public void transposta1(){
             int l1 = this.array1.GetLength(0);
             int c1 = this.array1.GetLength(1); 
-            // int[,] matriz = new int[l1,c1];
             int[,] res = new int[c1,l1];
 
-           // System.Console.WriteLine($"Matriz: {array1[i,j]}");
 
             for(int i = 0;i<l1;i++)
             {
                 for(int j = 0; j<c1;j++)
                 {
                     res[j,i] =  this.array1[i,j];
-                    // System.Console.WriteLine(res[i,j] + " ");
-                    //System.Console.WriteLine($"Matriz Transposta : {res}");
                 }
             }
-            Thread.CurrentThread.Join();
         }
     }
 }
