@@ -50,25 +50,11 @@ namespace Arq2_Thread
                 for(int j = 0; j<c1;j++)
                 {
                     res[j,i] =  this.array1[i,j];
-                    System.Console.WriteLine(res[i,j] + " ");
+                    // System.Console.WriteLine(res[i,j] + " ");
                     //System.Console.WriteLine($"Matriz Transposta : {res}");
                 }
             }
             return res;
-
-            /*Console.WriteLine("Mariz Normal: \n");
-            for(int i =0; i<l1; i++){
-                for(int j =0; j<c1; j++)
-                    Console.Write(this.array1[i,j] + " ");
-                Console.Write("\n");
-            } */
-
-            /*Console.WriteLine("Mariz Transposta: \n");
-            for(int i =0; i<l1; i++){
-                for(int j =0; j<c1; j++)
-                    Console.Write(res[i,j] + " ");
-                Console.Write("\n");
-            }*/
             
         }
 
@@ -145,7 +131,26 @@ namespace Arq2_Thread
             }
             Thread.CurrentThread.Join();         
 
-        }                                 
+        }
 
+        public void transposta1(){
+            int l1 = this.array1.GetLength(0);
+            int c1 = this.array1.GetLength(1); 
+            // int[,] matriz = new int[l1,c1];
+            int[,] res = new int[c1,l1];
+
+           // System.Console.WriteLine($"Matriz: {array1[i,j]}");
+
+            for(int i = 0;i<l1;i++)
+            {
+                for(int j = 0; j<c1;j++)
+                {
+                    res[j,i] =  this.array1[i,j];
+                    // System.Console.WriteLine(res[i,j] + " ");
+                    //System.Console.WriteLine($"Matriz Transposta : {res}");
+                }
+            }
+            Thread.CurrentThread.Join();
+        }
     }
 }
