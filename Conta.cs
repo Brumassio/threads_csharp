@@ -12,6 +12,7 @@ namespace Arq2_Thread
             this.array2 = array2;
         }
 
+        //Função multiplicação para execução sequencial
         public int[,]? multiplicaSeq(){
             int l1 = this.array1.GetLength(0); //linha do array1
             int c1 = this.array1.GetLength(1); //coluna do array1
@@ -35,6 +36,7 @@ namespace Arq2_Thread
             return matriz;
         }
 
+        //Função Tranposta (exemplo adicional que o professor pediu) para execução sequencial
         public int[,] transpostaSeq(){
             int l1 = this.array1.GetLength(0);
             int c1 = this.array1.GetLength(1); 
@@ -48,76 +50,84 @@ namespace Arq2_Thread
                 for(int j = 0; j<c1;j++)
                 {
                     res[j,i] =  this.array1[i,j];
-                    System.Console.WriteLine($"Matriz Transposta : {res}");
+                    System.Console.WriteLine(res[i,j] + " ");
+                    //System.Console.WriteLine($"Matriz Transposta : {res}");
                 }
             }
             return res;
+
+            /*Console.WriteLine("Mariz Normal: \n");
+            for(int i =0; i<l1; i++){
+                for(int j =0; j<c1; j++)
+                    Console.Write(this.array1[i,j] + " ");
+                Console.Write("\n");
+            } */
+
+            /*Console.WriteLine("Mariz Transposta: \n");
+            for(int i =0; i<l1; i++){
+                for(int j =0; j<c1; j++)
+                    Console.Write(res[i,j] + " ");
+                Console.Write("\n");
+            }*/
+            
         }
-    
+
+        //Função Subtração para execução sequencial
         public int[,] subtracaoSeq(){
             int [,]vet = new int [this.array1.GetLength(0),this.array1.GetLength(1)];
             for(int i = 0;i< array1.GetLength(0);i++){
                 for (int j = 0; j < array1.GetLength(0); j++){
-                    System.Console.WriteLine($"Subtração os valores {this.array1[i,j]} e {this.array2[i,j]} tem como resultado: {this.array1[i,j]-this.array2[i,j]}");
+                    // System.Console.WriteLine($"Subtração os valores {this.array1[i,j]} e {this.array2[i,j]} tem como resultado: {this.array1[i,j]-this.array2[i,j]}");
                     vet[i,j] = this.array1[i,j]-this.array2[i,j];
                 }
             }
             return vet;
         }
 
+        //Função Soma para execução sequencial
         public int[,] somaSeq(){
             int [,]vet = new int[this.array1.GetLength(0),this.array1.GetLength(1)];
             for (int i = 0; i < array1.GetLength(0); i++){
                 for (int j = 0; j < array1.GetLength(1); j++){
-                    System.Console.WriteLine($"Somando os valores {array1[i,j]} e {array2[i,j]} tem como resultado: {array1[i,j]+array2[i,j]}");
+                    // System.Console.WriteLine($"Somando os valores {array1[i,j]} e {array2[i,j]} tem como resultado: {array1[i,j]+array2[i,j]}");
                     vet[i,j] = array1[i,j]+array2[i,j];
                 }
             }
             return vet;
         }
 
-        // A seguir ficam as funções utlizadas para as threads
+        // A seguir ficam as funções utlizando Threads.
+
+        //Função Soma para execução utilizando Threads.
         public void soma1() {
-            // System.Console.WriteLine($"Thread: {Thread.CurrentThread.Name}");
+            int[,] matriz = new int[this.array1.GetLength(0),this.array1.GetLength(1)];
             for (int i=0;i<this.array1.GetLength(0)/2;i++) {
                 for (int j=0;j<this.array2.GetLength(1);j++) {
-                    System.Console.WriteLine($"Resultado da soma da pos [{i}][{j}]: {this.array1[i,j]+this.array2[i,j]}");
+                    matriz[i,j] = this.array1[i,j] + this.array2[i,j];
+                    // System.Console.WriteLine($"Resultado da soma da pos [{i}][{j}]: {this.array1[i,j]+this.array2[i,j]}");
                 }
-                Thread.Sleep(0);   
-            }                
-    
+            }
+            //Thread.CurrentThread.Join();           
 
         }
-
-        public void soma2(){
-            for (int i= this.array1.GetLength(0)/2;i<this.array1.GetLength(0);i++) {
+        
+        //Função Subtração para execução utilizando Threads.
+        public void subtracao1() {   
+            int[,] matriz = new int[this.array1.GetLength(0),this.array1.GetLength(1)];         
+            for (int i=0;i<this.array1.GetLength(0);i++) {
                 for (int j=0;j<this.array2.GetLength(1);j++) {
-                    System.Console.WriteLine($"Resultado da soma da pos [{i}][{j}]: {this.array1[i,j]+this.array2[i,j]}");
+                    matriz[i,j] = this.array1[i,j] - this.array1[i,j];
+                    // System.Console.WriteLine($"Resultado da subtração da pos [{i}][{j}]: {this.array1[i,j]-this.array2[i,j]}");
                 }
-                Thread.Sleep(0);   
-            }             
+            }
+            Thread.CurrentThread.Join();
         }
 
-        public void subtracao1() {
-            for (int i=0;i<this.array1.GetLength(0)/2;i++) {
-                for (int j=0;j<this.array2.GetLength(1);j++) {
-                    System.Console.WriteLine($"Resultado da subtração da pos [{i}][{j}]: {this.array1[i,j]-this.array2[i,j]}");
-                }
-                Thread.Sleep(0);   
-            }            
-        }
-        public void subtracao2() {
-            for (int i=this.array1.GetLength(0)/2 ;i<this.array1.GetLength(0) ;i++) {
-                for (int j=0;j<this.array2.GetLength(1);j++) {
-                    System.Console.WriteLine($"Resultado da subtração da pos [{i}][{j}]: {this.array1[i,j]-this.array2[i,j]}");
-                }
-                Thread.Sleep(0);   
-            }            
-        }
+        //Função Multiplicação para execução utilizando Threads.
         public void multiplicacao1() {
-            int l1 = this.array1.GetLength(0)/2 ;//linha do array1
+            int l1 = this.array1.GetLength(0) ;//linha do array1
             int c1 = this.array1.GetLength(1); //coluna do array1
-            int l2 = this.array2.GetLength(0)/2; //linha do array2
+            int l2 = this.array2.GetLength(0); //linha do array2
             int c2 = this.array2.GetLength(1); //coluna do array2
 
             int res = 0;
@@ -130,34 +140,12 @@ namespace Arq2_Thread
                     {
                         res += this.array1[i,m] * this.array2[m, j];
                     }
-                    System.Console.WriteLine($"Multiplicação resulta em : {res}");
                     matriz[i,j] = res;
                 }
-            }         
+            }
+            Thread.CurrentThread.Join();         
 
-        }
-        public void multiplicacao2() {
-            int l1 = this.array1.GetLength(0);//linha do array1
-            int c1 = this.array1.GetLength(1); //coluna do array1
-            int l2 = this.array2.GetLength(0); //linha do array2
-            int c2 = this.array2.GetLength(1); //coluna do array2
-
-            int res = 0;
-            int[,] matriz = new int[l1,c2];
-
-            for(int i = this.array1.GetLength(0)/2 ;i< l1;i++){
-                for (int j = 0; j < c2; j++){
-                    res = 0;
-                    for(int m =0;m<c1; m++)
-                    {
-                        res += this.array1[i,m] * this.array2[m, j];
-                    }
-                    System.Console.WriteLine($"Multiplicação resulta em : {res}");
-                    matriz[i,j] = res;
-                }
-            }          
-
-        }                                  
+        }                                 
 
     }
 }
