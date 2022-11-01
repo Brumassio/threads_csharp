@@ -72,10 +72,11 @@ class Program
                 System.Console.WriteLine("Volte sempre !");
                 break;
                 case 1:
-                Console.WriteLine("\n\nEscolha uma das opções a seguir (Multithread):\n");
+                Console.WriteLine("\n\nEscolha uma das opções a seguir (Sequêncial):\n");
                 Console.WriteLine("1--Soma");
                 Console.WriteLine("2--Subtração"); 
                 Console.WriteLine("3--Multiplicação");
+                Console.WriteLine("4--Transposta");
                 Console.WriteLine("0--Sair");
                 int.TryParse(Console.ReadLine(),out op2); 
                 switch(op2){
@@ -97,6 +98,12 @@ class Program
                     DateTime endmul = DateTime.Now;
                     System.Console.WriteLine(endmul.Subtract(beginmul));
                     break;
+                    case 4:
+                    DateTime begintr = DateTime.Now;
+                    con.transpostaSeq();
+                    DateTime endtr = DateTime.Now;
+                    System.Console.WriteLine(endtr.Subtract(begintr));
+                    break;
                     default:
                     System.Console.WriteLine("Opção errada !");
                     break;
@@ -108,6 +115,7 @@ class Program
                 Console.WriteLine("1--Soma");
                 Console.WriteLine("2--Subtração"); 
                 Console.WriteLine("3--Multiplicação");
+                Console.WriteLine("4--Transposta");
                 Console.WriteLine("0--Sair");
                 int.TryParse(Console.ReadLine(),out op2);
                 switch (op2)
@@ -190,6 +198,34 @@ class Program
                         //printando o tempo de execução
                         System.Console.WriteLine($"Tempo de execução: {endMul.Subtract(beginMul)} "); 
                         break;
+
+                    case 4:
+                        //guardando o tempo para calcular o tempo de execução
+                        DateTime beginTr = DateTime.Now;
+                        System.Console.WriteLine("Matriz Transposta:");
+
+                        for(int i=0;i<qtd;i++){
+                            threads[i] = new Thread(con.transposta1);
+                        }
+
+
+                        foreach (var item in threads)
+                        {
+                            //inicializando as threads guardadas anteriormente
+                            item.Start();
+                        }
+                        foreach (var item in threads)
+                        {
+                            //inicializando as threads guardadas anteriormente
+                            item.Join();
+                        }         
+                        // pode variar o tempo de sleep para todas as operações (pode ser por causa do break do switch)-> matriz[10][10]: 1 ,
+                        // matriz[100][100]:3000, matriz[1000][1000]: um valor maior ai !  
+                        // Thread.Sleep(10000);
+                        DateTime endTr = DateTime.Now;
+                        //printando o tempo de execução
+                        System.Console.WriteLine($"Tempo de execução: {endTr.Subtract(beginTr)} "); 
+                        break;                        
                     
                     default:
                         System.Console.WriteLine("\nDigite uma opção válida ! :D");
