@@ -50,12 +50,15 @@ class Program
         atribui(array100_2);
         atribui(array1000_2);
         Object locker = new Object();
-
-        Thread[] threads = new Thread[2];
+        //Quantidade de Threads a ser escolhida pelo usuário
+        int qtd;
+        System.Console.WriteLine("Digite a quantidade de threads: ");
+        int.TryParse(Console.ReadLine(),out qtd); 
+        Thread[] threads = new Thread[qtd];
         Thread mainThread = Thread.CurrentThread;
         mainThread.Name = "mainThread";
         // para testar as outras matrizes
-        Conta con = new Conta(array1000,array1000_2);
+        Conta con = new Conta(array100,array100_2);
         int op =1;
         int op2 = 2;
         while(op!=0)
@@ -115,24 +118,18 @@ class Program
                         //guardando o tempo para calcular o tempo de execução
                         DateTime begin = DateTime.Now;
                         System.Console.WriteLine("Soma:");
-
-                        //guardando a primeira thread
-                        Thread thread = new Thread(con.soma1);
-                        thread.Name = "Thread" + 0;
-                        threads[0] = thread;
-                        //guardando a segunda thread
-                        Thread thread2 = new Thread(con.soma2);
-                        thread.Name = "Thread" + 1;
-                        threads[1] = thread2;  
+                        for(int i=0;i<qtd;i++){
+                            threads[i] = new Thread(con.soma1);
+                        }
 
                         foreach (var item in threads)
                         {
                             //inicializando as threads guardadas anteriormente
                             item.Start();
-                        }      
+                        }
                         // pode variar o tempo de sleep para todas as operações (pode ser por causa do break do switch)-> matriz[10][10]: 1 ,
                         // matriz[100][100]:2400, matriz[1000][1000]: um valor maior  
-                        Thread.Sleep(10000);
+                        // Thread.Sleep(0);
                         DateTime end = DateTime.Now;
                         //printando o tempo de execução
                         System.Console.WriteLine($"Tempo de execução: {end.Subtract(begin)} ");  
@@ -143,23 +140,24 @@ class Program
                         DateTime beginSub = DateTime.Now;
                         System.Console.WriteLine("Subtracao:");
 
-                        //guardando a primeira thread
-                        Thread threadSub = new Thread(con.subtracao1);
-                        threadSub.Name = "Thread" + 0;
-                        threads[0] = threadSub;
-                        //guardando a segunda thread
-                        Thread thread2Sub = new Thread(con.subtracao2);
-                        threadSub.Name = "Thread" + 1;
-                        threads[1] = thread2Sub;  
+                        for(int i=0;i<qtd;i++){
+                            threads[i] = new Thread(con.subtracao1);
+                        }
+
 
                         foreach (var item in threads)
                         {
                             //inicializando as threads guardadas anteriormente
                             item.Start();
-                        }      
+                        }
+                        foreach (var item in threads)
+                        {
+                            //inicializando as threads guardadas anteriormente
+                            item.Join();
+                        }
                         // pode variar o tempo de sleep para todas as operações (pode ser por causa do break do switch)-> matriz[10][10]: 1 ,
                         // matriz[100][100]:3000, matriz[1000][1000]: um valor maior  
-                        Thread.Sleep(10000);
+                        // Thread.Sleep(10000);
                         DateTime endSub = DateTime.Now;
                         //printando o tempo de execução
                         System.Console.WriteLine($"Tempo de execução: {endSub.Subtract(beginSub)} ");                  
@@ -170,23 +168,24 @@ class Program
                         DateTime beginMul = DateTime.Now;
                         System.Console.WriteLine("Multiplicação:");
 
-                        //guardando a primeira thread
-                        Thread threadMul = new Thread(con.multiplicacao1);
-                        threadMul.Name = "Thread" + 0;
-                        threads[0] = threadMul;
-                        //guardando a segunda thread
-                        Thread thread2Mul = new Thread(con.multiplicacao2);
-                        threadMul.Name = "Thread" + 1;
-                        threads[1] = thread2Mul;  
+                        for(int i=0;i<qtd;i++){
+                            threads[i] = new Thread(con.multiplicacao1);
+                        }
+
 
                         foreach (var item in threads)
                         {
                             //inicializando as threads guardadas anteriormente
                             item.Start();
-                        }      
+                        }
+                        foreach (var item in threads)
+                        {
+                            //inicializando as threads guardadas anteriormente
+                            item.Join();
+                        }         
                         // pode variar o tempo de sleep para todas as operações (pode ser por causa do break do switch)-> matriz[10][10]: 1 ,
                         // matriz[100][100]:3000, matriz[1000][1000]: um valor maior ai !  
-                        Thread.Sleep(10000);
+                        // Thread.Sleep(10000);
                         DateTime endMul = DateTime.Now;
                         //printando o tempo de execução
                         System.Console.WriteLine($"Tempo de execução: {endMul.Subtract(beginMul)} "); 
